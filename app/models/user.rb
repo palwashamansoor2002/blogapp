@@ -2,12 +2,11 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   enum role: { user: 0, moderator: 1, admin: 2 }
-  validates :name, presence: true
-  validates :email, uniqueness: true
+#  validates :email, uniqueness: true
   validate :password_complexity
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable ,:confirmable
       
 
   def password_complexity
