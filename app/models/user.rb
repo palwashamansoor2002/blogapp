@@ -2,12 +2,15 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   enum role: { user: 0, moderator: 1, admin: 2 }
-#  validates :email, uniqueness: true
+  validates :email, uniqueness: true
   validate :password_complexity
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable ,:confirmable
-      
+
+  has_many :posts, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :likes, dependent: :destroy 
 
   def password_complexity
     return if password.blank?
