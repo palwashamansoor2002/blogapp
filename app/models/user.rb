@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  enum role: { user: 0, moderator: 1, admin: 2 }
+  enum role: { user: 0, admin: 1 }
   validates :email, uniqueness: true
   validates :name, presence: true
   validate :password_complexity
