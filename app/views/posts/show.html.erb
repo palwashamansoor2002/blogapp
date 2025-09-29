@@ -1,23 +1,71 @@
-<h1><%= @post.title %></h1>
-<p><%= @post.body %></p>
-<p>by <%= @post.user.name %></p>
+<div class="max-w-3xl mx-auto py-10 px-6">
+  <!-- Post Card -->
+  <div class="bg-white shadow-lg rounded-2xl p-6 mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-4"><%= @post.title %></h1>
+    <p class="text-gray-700 text-lg mb-4"><%= @post.body %></p>
+    <p class="text-sm text-gray-500">by <span class="font-medium text-gray-700"><%= @post.user.name %></span></p>
 
-<%= render 'comments/form', post: @post %>
+    <!-- Like/Unlike Post -->
+    <% if user_signed_in? %>
+      <div class="mt-4">
+        <% if current_user.likes.exists?(likeable: @post) %>
+          <%= button_to "Unlike",
+              post_like_path(@post, current_user.likes.find_by(likeable: @post)),
+              method: :delete,
+              class: "px-4 py-2 text-sm bg-red-500 text-white rounded-lg shadow hover:bg-red-600" %>
+        <% else %>
+          <%= button_to "Like",
+              post_likes_path(@post),
+              params: { likeable_type: "Post", likeable_id: @post.id },
+              method: :post,
+              class: "px-4 py-2 text-sm bg-indigo-500 text-white rounded-lg shadow hover:bg-indigo-600" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 
+  <!-- Comment Form -->
+  <div class="bg-gray-50 shadow-md rounded-xl p-6 mb-8">
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">Leave a Comment</h3>
+    <%= render 'comments/form', post: @post %>
+  </div>
 
-<h3>Comments</h3>
-<% @post.comments.each do |comment| %>
-  <p><%= comment.body %> - <%= comment.user.name %></p>
-<% end %>
+  <!-- Comments Section -->
+  <div class="bg-white shadow-md rounded-xl p-6">
+    <h3 class="text-xl font-semibold text-gray-800 mb-6">Comments</h3>
 
+    <% @post.comments.each do |comment| %>
+      <div class="border-b border-gray-200 pb-4 mb-4">
+        <p class="text-gray-700"><%= comment.body %></p>
+        <p class="text-sm text-gray-500">— <%= comment.user.name %></p>
 
+        <div class="mt-2 flex items-center space-x-3">
+          <!-- Like/Unlike Comment -->
+          <% if user_signed_in? %>
+            <% if current_user.likes.exists?(likeable: comment) %>
+              <%= button_to "Unlike",
+                  post_comment_like_path(@post, comment, current_user.likes.find_by(likeable: comment)),
+                  method: :delete,
+                  class: "px-3 py-1 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600" %>
+            <% else %>
+              <%= button_to "Like",
+                  post_comment_likes_path(@post, comment),
+                  params: { likeable_type: "Comment", likeable_id: comment.id },
+                  method: :post,
+                  class: "px-3 py-1 text-xs bg-indigo-500 text-white rounded-lg hover:bg-indigo-600" %>
+            <% end %>
+          <% end %>
 
-<% if user_signed_in? %>
-  <% if policy(@post).update? %>
-    <%= link_to "Edit", edit_post_path(@post), class: "btn btn-secondary" %>
-  <% end %>
-
-  <% if policy(@post).destroy? %>
-    <%= link_to "Delete", @post, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
-  <% end %>
-<% end %>
+          <!-- Delete Comment -->
+          <% if user_signed_in? && (current_user.admin? || comment.user == current_user) %>
+            <%= link_to "Delete",
+                post_comment_path(@post, comment),
+                method: :delete,
+                data: { confirm: "Are you sure?" },
+                class: "px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
