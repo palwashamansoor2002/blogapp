@@ -2,6 +2,16 @@
 <p><%= @post.body %></p>
 <p>by <%= @post.user.name %></p>
 
+<%= render 'comments/form', post: @post %>
+
+
+<h3>Comments</h3>
+<% @post.comments.each do |comment| %>
+  <p><%= comment.body %> - <%= comment.user.name %></p>
+<% end %>
+
+
+
 <% if user_signed_in? %>
   <% if policy(@post).update? %>
     <%= link_to "Edit", edit_post_path(@post), class: "btn btn-secondary" %>
