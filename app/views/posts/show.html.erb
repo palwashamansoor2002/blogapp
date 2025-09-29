@@ -1,3 +1,13 @@
 <h1><%= @post.title %></h1>
 <p><%= @post.body %></p>
 <p>by <%= @post.user.name %></p>
+
+<% if user_signed_in? %>
+  <% if policy(@post).update? %>
+    <%= link_to "Edit", edit_post_path(@post), class: "btn btn-secondary" %>
+  <% end %>
+
+  <% if policy(@post).destroy? %>
+    <%= link_to "Delete", @post, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+  <% end %>
+<% end %>
