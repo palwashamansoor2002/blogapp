@@ -1,12 +1,23 @@
-<h1 class="text-2xl font-bold mb-4">Admin Dashboard</h1>
+<div class="max-w-4xl mx-auto py-10 px-6">
 
-<p>Total Posts: <%= @posts_count %></p>
+  <!-- Dashboard Header -->
+  <h1 class="text-3xl font-bold text-gray-900 mb-6 text-center">Admin Dashboard</h1>
 
-<h2 class="mt-6 font-semibold text-xl">Recent Posts</h2>
-<ul class="list-disc ml-5 mt-2">
-  <% @recent_posts.each do |post| %>
-    <li>
-      <%= link_to post.title, admin_post_path(post), class: "text-blue-600 hover:underline" %> by <%= post.user.name %>
-    </li>
-  <% end %>
-</ul>
+  <!-- Summary Stats -->
+  <div class="bg-white shadow-md rounded-xl p-6 mb-8">
+    <p class="text-gray-700 text-lg">Total Posts: <span class="font-semibold"><%= @posts_count %></span></p>
+  </div>
+
+  <!-- Recent Posts -->
+  <div class="bg-white shadow-md rounded-xl p-6">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Recent Posts</h2>
+    <ul class="space-y-2 list-disc list-inside">
+      <% @recent_posts.each do |post| %>
+        <li class="text-gray-700">
+          <%= link_to post.title, post_path(post), class: "text-indigo-600 hover:underline font-medium" %> by <span class="text-gray-600"><%= post.user.name %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+</div>
