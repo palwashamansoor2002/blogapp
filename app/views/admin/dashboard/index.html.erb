@@ -1,0 +1,12 @@
+<h1 class="text-2xl font-bold mb-4">Admin Dashboard</h1>
+
+<p>Total Posts: <%= @posts_count %></p>
+
+<h2 class="mt-6 font-semibold text-xl">Recent Posts</h2>
+<ul class="list-disc ml-5 mt-2">
+  <% @recent_posts.each do |post| %>
+    <li>
+      <%= link_to post.title, admin_post_path(post), class: "text-blue-600 hover:underline" %> by <%= post.user.name %>
+    </li>
+  <% end %>
+</ul>

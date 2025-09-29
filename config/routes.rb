@@ -10,5 +10,10 @@ Rails.application.routes.draw do
   end
 
   devise_for :users
+  
+  namespace :admin do
+    root 'dashboard#index'
+    resources :posts
+  end
 
 end
