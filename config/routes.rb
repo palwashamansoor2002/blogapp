@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   end
 
   resources :posts, concerns: :likeable do
-    resources :comments, concerns: :likeable
+    resources :comments, concerns: :likeable, only: [:create, :destroy, :update]
   end
 
   devise_for :users
